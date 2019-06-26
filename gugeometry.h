@@ -77,7 +77,8 @@ bool between_cartesian_edge(CartesianEdge edge, CartesianCoordinate point);
 CartesianCoordinate to_cartesian(Coordinate coordinate);
 */
 
-CircleOctant octant(degrees_t degrees);
+radians_f angle_between_points(CartesianCoordinate p1, CartesianCoordinate p2);
+CircleOctant octant(radians_f radians);
 
 #ifdef __cplusplus
 };

@@ -103,6 +103,7 @@ CartesianCoordinate to_cartesian(Coordinate coordinate)
     const int y = int(round(radius * sin(theta)));
     return CartesianCoordinate(x, y);
 }
+*/
 
 degrees_f angle_between_points(CartesianCoordinate p1, CartesianCoordinate p2)
 {
@@ -116,11 +117,10 @@ degrees_f angle_between_points(CartesianCoordinate p1, CartesianCoordinate p2)
     }
     return rad_f_to_deg_f(f_to_rad_f(atan2((float) (dy), (float) (dx))));
 }
-*/
 
-CircleOctant octant(degrees_t degrees)
+CircleOctant octant(radians_f radians)
 {
-    const float angle = rad_f_to_f(deg_t_to_rad_f(degrees));
+    const float angle = rad_f_to_f(radians);
     if (angle < 0) {
         return this->octant(angle + float(2 * M_PI));
     }
