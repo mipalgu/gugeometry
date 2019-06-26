@@ -74,14 +74,14 @@ extern "C" {
 bool between_edge(Edge edge, Coordinate coordinate);
 */
 
-radians_f angle_between_points(CartesianCoordinate p1, CartesianCoordinate p2);
-radians_f angle_for_octant(CircleOctant octant);
-radians_f angle_from_octant(radians_f radians);
-bool between_cartesian_edge(CartesianEdge edge, CartesianCoordinate point);
-CartesianCoordinate coord_to_cart(Coordinate coordinate);
-float distance_between_points(CartesianCoordinate point1, CartesianCoordinate point2);
-float distance_from_cartesian_edge(CartesianEdge edge, CartesianCoordinate point);
-CircleOctant octant(radians_f radians);
+radians_d angle_between_points(struct CartesianCoordinate p1, struct CartesianCoordinate p2);
+radians_d angle_for_octant(enum CircleOctant octant);
+radians_d angle_from_octant(radians_d radians);
+bool between_cartesian_edge(struct CartesianEdge edge, struct CartesianCoordinate point);
+struct CartesianCoordinate coord_to_cart(struct Coordinate coordinate);
+double distance_between_points(struct CartesianCoordinate point1, struct CartesianCoordinate point2);
+double distance_from_cartesian_edge(struct CartesianEdge edge, struct CartesianCoordinate point);
+enum CircleOctant octant(radians_d radians);
 
 #ifdef __cplusplus
 };

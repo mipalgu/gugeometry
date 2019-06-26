@@ -59,155 +59,158 @@
 #include "gugeometry.h"
 
 #include <guunits/guunits.h>
+#include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
 
-degrees_f angle_between_points(CartesianCoordinate p1, CartesianCoordinate p2)
+radians_d angle_between_points(struct CartesianCoordinate p1, struct CartesianCoordinate p2)
 {
     const int dx = p2.x - p1.x;
     const int dy = p2.y - p1.y;
     if (0 == dx) {
         if (0 == dy) {
-            return 0.0f;
+            return 0.0;
         }
-        return dy > 0 ? f_to_deg_f(90.0f) : f_to_deg_f(-90.0f);
+        return dy > 0 ? d_to_rad_d(90.0) : d_to_rad_d(-90.0);
     }
-    return rad_f_to_deg_f(f_to_rad_f(atan2((float) (dy), (float) (dx))));
+    return d_to_rad_d(atan2((double) (dy), (double) (dx)));
 }
 
-radians_f angle_for_octant(CircleOctant octant)
+radians_d angle_for_octant(enum CircleOctant octant)
 {
     switch (octant) {
     case FirstOctant:
-        return 0.0f;
+        return 0.0;
     case SecondOctant:
-        return f_to_rad_f(DEG2RAD(45.0f));
+        return deg_d_to_rad_d(45.0);
     case ThirdOctant:
-        return f_to_rad_f(DEG2RAD(90.0f));
+        return deg_d_to_rad_d(90.0);
     case FourthOctant:
-        return f_to_rad_f(DEG2RAD(135.0f));
+        return deg_d_to_rad_d(135.0);
     case FifthOctant:
-        return f_to_rad_f(DEG2RAD(180.0f));
+        return deg_d_to_rad_d(180.0);
     case SixthOctant:
-        return f_to_rad_f(DEG2RAD(225.0f));
+        return deg_d_to_rad_d(225.0);
     case SeventhOctant:
-        return f_to_rad_f(DEG2RAD(270.0f));
+        return deg_d_to_rad_d(270.0);
     case EightOctant:
-        return f_to_rad_f(DEG2RAD(315.0f));
+        return deg_d_to_rad_d(315.0);
     }
 }
 
-radians_f angle_from_octant(radians_f radians)
+radians_d angle_from_octant(radians_d radians)
 {
-    const float angle = rad_f_to_f(radians);
-    const enum CircleOctant octant = octant(radians);
-    const float octantAngle = rad_f_to_f(angle_for_octant(octant)) + (octant % 2 == 0 ? 0.0f : DEG2RAD(45.0f));
-    if (octant % 2 == 0) {
-        return f_to_rad_f(angle - octantAngle);
+    const double angle = rad_d_to_d(radians);
+    const enum CircleOctant oct = octant(radians);
+    const double octantAngle = rad_d_to_d(angle_for_octant(oct)) + (oct % 2 == 0 ? 0.0 : rad_d_to_d(deg_d_to_rad_d(45.0)));
+    if (oct % 2 == 0) {
+        return d_to_rad_d(angle - octantAngle);
     }
-    return f_to_rad_f(octantAngle - angle);
+    return d_to_rad_d(octantAngle - angle);
 }
 
-bool between_cartesian_edge(CartesianEdge edge, CartesianCoordinate point)
+bool between_cartesian_edge(struct CartesianEdge edge, struct CartesianCoordinate point)
 {
     // Horizontal Lines
     if (edge.leftPoint.x == edge.rightPoint.x) {
-        const CartesianCoordinate re1 = edge.leftPoint.y < edge.rightPoint.y ? edge.leftPoint() : edge.rightPoint();
-        const CartesianCoordinate re2 = edge.leftPoint.y < edge.rightPoint.y ? edge.rightPoint() : edge.leftPoint();
+        const struct CartesianCoordinate re1 = edge.leftPoint.y < edge.rightPoint.y ? edge.leftPoint : edge.rightPoint;
+        const struct CartesianCoordinate re2 = edge.leftPoint.y < edge.rightPoint.y ? edge.rightPoint : edge.leftPoint;
         return point.y >= re1.y && point.y <= re2.y;
     }
     // Veritcal Lines
     if (edge.leftPoint.y == edge.rightPoint.y) {
-        const CartesianCoordinate re1 = edge.leftPoint.x < edge.rightPoint.x ? edge.leftPoint() : edge.rightPoint();
-        const CartesianCoordinate re2 = edge.leftPoint.x < edge.rightPoint.x ? edge.rightPoint() : edge.leftPoint();
+        const struct CartesianCoordinate re1 = edge.leftPoint.x < edge.rightPoint.x ? edge.leftPoint : edge.rightPoint;
+        const struct CartesianCoordinate re2 = edge.leftPoint.x < edge.rightPoint.x ? edge.rightPoint : edge.leftPoint;
         return point.x >= re1.x && point.x <= re2.x;
     }
     // All other lines.
-    const CartesianCoordinate leftEdge = edge.leftPoint.x < edge.rightPoint.x ? edge.leftPoint() : edge.rightPoint();
-    const CartesianCoordinate rightEdge = edge.leftPoint.x < edge.rightPoint.x ? edge.rightPoint() : edge.leftPoint();
-    const CartesianCoordinate midPoint = CartesianCoordinate(rightEdge.x - leftEdge.x, rightEdge.y - leftEdge.y);
+    const struct CartesianCoordinate leftEdge = edge.leftPoint.x < edge.rightPoint.x ? edge.leftPoint : edge.rightPoint;
+    const struct CartesianCoordinate rightEdge = edge.leftPoint.x < edge.rightPoint.x ? edge.rightPoint : edge.leftPoint;
+    const struct CartesianCoordinate midPoint = { rightEdge.x - leftEdge.x, rightEdge.y - leftEdge.y };
     // Translate by edge so that it goes through the origin.
-    const CartesianCoordinate t1 = CartesianCoordinate(leftEdge.x - midPoint.x, leftEdge.y - midPoint.y);
-    const CartesianCoordinate t2 = CartesianCoordinate(rightEdge.x - midPoint.x, rightEdge.y - midPoint.y);
-    const CartesianCoordinate tpoint = CartesianCoordinate(point.x - midPoint.x, point.y - midPoint.y);
+    const struct CartesianCoordinate t1 = { leftEdge.x - midPoint.x, leftEdge.y - midPoint.y };
+    const struct CartesianCoordinate t2 = { rightEdge.x - midPoint.x, rightEdge.y - midPoint.y };
+    const struct CartesianCoordinate tpoint = { point.x - midPoint.x, point.y - midPoint.y };
     // Rotate the translated edge so that it is inline with the x axis.
-    const float angle = rad_f_to_f(deg_f_to_rad_f(angle_between_points(CartesianCoordinate(0, 0), t2)));
-    const CartesianCoordinate r1 = CartesianCoordinate((int) (round(((float) (t1.x)) * cos(angle))), (int) (round(((float) (t1.y)) * sin(angle))));
-    const CartesianCoordinate r2 = CartesianCoordinate((int) (round(((float) (t2.x)) * cos(angle))), (int) (round(((float) (t2.y)) * sin(angle))));
-    const CartesianCoordinate rpoint = CartesianCoordinate((int) (round(((float) (tpoint.x)) * cos(angle))), (int) (round(((float) (tpoint.y)) * sin(angle))));
+    const struct CartesianCoordinate origin = {0, 0};
+    const double angle = rad_d_to_d(deg_d_to_rad_d(angle_between_points(origin, t2)));
+    const struct CartesianCoordinate r1 = { (int) (round(((double) (t1.x)) * cos(angle))), (int) (round(((double) (t1.y)) * sin(angle))) };
+    const struct CartesianCoordinate r2 = { (int) (round(((double) (t2.x)) * cos(angle))), (int) (round(((double) (t2.y)) * sin(angle))) };
+    const struct CartesianCoordinate rpoint = { (int) (round(((double) (tpoint.x)) * cos(angle))), (int) (round(((double) (tpoint.y)) * sin(angle))) };
     // Check the x values to see if the point is between the points of the edge.
     return rpoint.x >= r1.x && rpoint.x <= r2.x;
 }
 
-CartesianCoordinate coord_to_cart(Coordinate coordinate)
+struct CartesianCoordinate coord_to_cart(struct Coordinate coordinate)
 {
-    const float radius = cm_u_to_f(coordinate.distance());
-    const float theta = rad_f_to_f(deg_t_to_rad_f(coordinate.direction()));
-    const int x = int(round(radius * cos(theta)));
-    const int y = int(round(radius * sin(theta)));
-    return CartesianCoordinate(x, y);
+    const double radius = cm_u_to_d(coordinate.distance);
+    const double theta = rad_d_to_d(deg_t_to_rad_d(coordinate.direction));
+    const int x = (int) (round(radius * cos(theta)));
+    const int y = (int) (round(radius * sin(theta)));
+    const struct CartesianCoordinate result = {x, y};
+    return result;
 }
 
-float distance_between_points(CartesianCoordinate point1, CartesianCoordinate point2)
+double distance_between_points(struct CartesianCoordinate point1, struct CartesianCoordinate point2)
 {
-    const CartesianCoordinate dpoint = CartesianCoordinate(p2.x - p1.x, p2.y - p1.y);
+    const struct CartesianCoordinate dpoint = { point2.x - point1.x, point2.y - point1.y };
     // Horizontal Lines
     if (0 == dpoint.x) {
-        return ((float) (abs(dpoint.y)));
+        return ((double) (abs(dpoint.y)));
     }
     // Veritcal Lines
     if (0 == dpoint.y) {
-        return ((float) (abs(dpoint.x)));
+        return ((double) (abs(dpoint.x)));
     }
-    return sqrt(((float) (dpoint.x * dpoint.x)) + ((float) (dpoint.y * dpoint.y)));
+    return sqrt(((double) (dpoint.x * dpoint.x)) + ((double) (dpoint.y * dpoint.y)));
 }
 
-float distance_from_cartesian_edge(CartesianEdge edge, CartesianCoordinate point)
+double distance_from_cartesian_edge(struct CartesianEdge edge, struct CartesianCoordinate point)
 {
    // If we are not within the bounds of the edge then calculate the distance from the nearest edge point.
-    if (!between_cartesian_edge(edge point))
+    if (!between_cartesian_edge(edge, point))
     {
         return MIN(distance_between_points(edge.leftPoint, point), distance_between_points(edge.rightPoint, point));
     }
     // Calculate the distance from the line to the point.
-    const float x0 = (float) (point.x);
-    const float y0 = (float) (point.y);
-    const float x1 = (float) (edge.leftPoint.x);
-    const float y1 = (float) (edge.leftPoint.y);
-    const float x2 = (float) (edge.rightPoint.x);
-    const float y2 = (float) (edge.rightPoint.y);
-    return abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1))); 
+    const double x0 = (double) (point.x);
+    const double y0 = (double) (point.y);
+    const double x1 = (double) (edge.leftPoint.x);
+    const double y1 = (double) (edge.leftPoint.y);
+    const double x2 = (double) (edge.rightPoint.x);
+    const double y2 = (double) (edge.rightPoint.y);
+    return fabs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1))); 
 }
 
-CircleOctant octant(radians_f radians)
+enum CircleOctant octant(radians_d radians)
 {
-    const float angle = rad_f_to_f(radians);
+    const double angle = rad_d_to_d(radians);
     if (angle < 0) {
-        return this->octant(angle + float(2 * M_PI));
+        return octant(d_to_rad_d(angle + (2.0 * M_PI)));
     }
-    if (angle < M_PI / 4.0f) {
+    if (angle < M_PI / 4.0) {
         return FirstOctant;
     }
-    if (angle < M_PI / 2.0f) {
+    if (angle < M_PI / 2.0) {
         return SecondOctant;
     }
-    if (angle < 3 * M_PI / 4.0f) {
+    if (angle < 3 * M_PI / 4.0) {
         return ThirdOctant;
     }
     if (angle < M_PI) {
         return FourthOctant;
     }
-    if (angle < M_PI * 5 / 4.0f) {
+    if (angle < M_PI * 5 / 4.0) {
         return FifthOctant;
     }
-    if (angle < M_PI * 3 / 2.0f) {
+    if (angle < M_PI * 3 / 2.0) {
         return SixthOctant;
     }
-    if (angle < M_PI * 7 / 4.0f) {
+    if (angle < M_PI * 7 / 4.0) {
         return SeventhOctant;
     }
     if (angle < M_PI * 2) {
         return EightOctant;
     }
-    return octant(angle - float(2 * M_PI));
+    return octant(d_to_rad_d(angle - (2.0 * M_PI)));
 }
