@@ -20,6 +20,8 @@ PKGCONFIG_NAME=gugeometry
 PKGCONFIG_VERSION=1.0
 PKGCONFIG_DESCRIPTION=A library for basic geomtric operations.
 
+all:	all-real
+
 .ifndef IGNORE_TESTS
 robot-local:
 	$Ebmake test
