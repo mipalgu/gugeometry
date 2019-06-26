@@ -150,16 +150,33 @@ CartesianCoordinate coord_to_cart(Coordinate coordinate)
 
 float distance_between_points(CartesianCoordinate point1, CartesianCoordinate point2)
 {
-    const CartesianCoordinate dpoint = CartesianCoordinate(p2.x() - p1.x(), p2.y() - p1.y());
+    const CartesianCoordinate dpoint = CartesianCoordinate(p2.x - p1.x, p2.y - p1.y);
     // Horizontal Lines
-    if (0 == dpoint.x()) {
-        return ((float) (abs(dpoint.y())));
+    if (0 == dpoint.x) {
+        return ((float) (abs(dpoint.y)));
     }
     // Veritcal Lines
-    if (0 == dpoint.y()) {
-        return ((float) (abs(dpoint.x())));
+    if (0 == dpoint.y) {
+        return ((float) (abs(dpoint.x)));
     }
-    return sqrt(((float) (dpoint.x() * dpoint.x())) + ((float) (dpoint.y() * dpoint.y())));
+    return sqrt(((float) (dpoint.x * dpoint.x)) + ((float) (dpoint.y * dpoint.y)));
+}
+
+float distance_from_cartesian_edge(CartesianEdge edge, CartesianCoordinate point)
+{
+   // If we are not within the bounds of the edge then calculate the distance from the nearest edge point.
+    if (!between_cartesian_edge(edge point))
+    {
+        return MIN(distance_between_points(edge.leftPoint, point), distance_between_points(edge.rightPoint, point));
+    }
+    // Calculate the distance from the line to the point.
+    const float x0 = (float) (point.x);
+    const float y0 = (float) (point.y);
+    const float x1 = (float) (edge.leftPoint.x);
+    const float y1 = (float) (edge.leftPoint.y);
+    const float x2 = (float) (edge.rightPoint.x);
+    const float y2 = (float) (edge.rightPoint.y);
+    return abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1))); 
 }
 
 CircleOctant octant(radians_f radians)
