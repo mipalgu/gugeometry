@@ -75,6 +75,29 @@ degrees_f angle_between_points(CartesianCoordinate p1, CartesianCoordinate p2)
     return rad_f_to_deg_f(f_to_rad_f(atan2((float) (dy), (float) (dx))));
 }
 
+radians_f angle_for_octant(CircleOctant octant)
+{
+    switch (octant) {
+    case FirstOctant:
+        return 0.0f;
+    case SecondOctant:
+        return float(DEG2RAD(45.0f));
+    case ThirdOctant:
+        return float(DEG2RAD(90.0f));
+    case FourthOctant:
+        return float(DEG2RAD(135.0f));
+    case FifthOctant:
+        return float(DEG2RAD(180.0f));
+    case SixthOctant:
+        return float(DEG2RAD(225.0f));
+    case SeventhOctant:
+        return float(DEG2RAD(270.0f));
+    case EightOctant:
+        return float(DEG2RAD(315.0f));
+    }
+}
+}
+
 bool between_cartesian_edge(CartesianEdge edge, CartesianCoordinate point)
 {
     // Horizontal Lines
