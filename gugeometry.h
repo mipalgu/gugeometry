@@ -72,12 +72,10 @@ extern "C" {
 
 /*
 bool between_edge(Edge edge, Coordinate coordinate);
-bool between_cartesian_edge(CartesianEdge edge, CartesianCoordinate point);
-
-CartesianCoordinate to_cartesian(Coordinate coordinate);
 */
 
 radians_f angle_between_points(CartesianCoordinate p1, CartesianCoordinate p2);
+bool between_cartesian_edge(CartesianEdge edge, CartesianCoordinate point);
 CartesianCoordinate coord_to_cart(Coordinate coordinate);
 CircleOctant octant(radians_f radians);
 

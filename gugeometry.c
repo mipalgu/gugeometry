@@ -62,7 +62,19 @@
 #include <stdint.h>
 #include <math.h>
 
-/*
+degrees_f angle_between_points(CartesianCoordinate p1, CartesianCoordinate p2)
+{
+    const int dx = p2.x - p1.x;
+    const int dy = p2.y - p1.y;
+    if (0 == dx) {
+        if (0 == dy) {
+            return 0.0f;
+        }
+        return dy > 0 ? f_to_deg_f(90.0f) : f_to_deg_f(-90.0f);
+    }
+    return rad_f_to_deg_f(f_to_rad_f(atan2((float) (dy), (float) (dx))));
+}
+
 bool between_cartesian_edge(CartesianEdge edge, CartesianCoordinate point)
 {
     // Horizontal Lines
@@ -92,21 +104,6 @@ bool between_cartesian_edge(CartesianEdge edge, CartesianCoordinate point)
     const CartesianCoordinate rpoint = CartesianCoordinate((int) (round(((float) (tpoint.x)) * cos(angle))), (int) (round(((float) (tpoint.y)) * sin(angle))));
     // Check the x values to see if the point is between the points of the edge.
     return rpoint.x >= r1.x && rpoint.x <= r2.x;
-}
-
-*/
-
-degrees_f angle_between_points(CartesianCoordinate p1, CartesianCoordinate p2)
-{
-    const int dx = p2.x - p1.x;
-    const int dy = p2.y - p1.y;
-    if (0 == dx) {
-        if (0 == dy) {
-            return 0.0f;
-        }
-        return dy > 0 ? f_to_deg_f(90.0f) : f_to_deg_f(-90.0f);
-    }
-    return rad_f_to_deg_f(f_to_rad_f(atan2((float) (dy), (float) (dx))));
 }
 
 CartesianCoordinate coord_to_cart(Coordinate coordinate)
