@@ -59,10 +59,6 @@
 #ifndef GUGEOMETRY_H
 #define GUGEOMETRY_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <guunits/Coordinate.h>
 #include <guunits/Edge.h>
 #include <guunits/CartesianCoordinate.h>
@@ -70,17 +66,21 @@ extern "C" {
 
 #include "CircleOctant.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
 bool between_edge(Edge edge, Coordinate coordinate);
 */
 
-radians_d angle_between_points(struct CartesianCoordinate p1, struct CartesianCoordinate p2);
+radians_d angle_between_points(struct cartesian_coordinate p1, struct cartesian_coordinate p2);
 radians_d angle_for_octant(enum CircleOctant octant);
 radians_d angle_from_octant(radians_d radians);
-bool between_cartesian_edge(struct CartesianEdge edge, struct CartesianCoordinate point);
-struct CartesianCoordinate coord_to_cart(struct Coordinate coordinate);
-centimetres_d distance_between_points(struct CartesianCoordinate point1, struct CartesianCoordinate point2);
-centimetres_d distance_from_cartesian_edge(struct CartesianEdge edge, struct CartesianCoordinate point);
+bool between_cartesian_edge(struct cartesian_edge edge, struct cartesian_coordinate point);
+struct cartesian_coordinate coord_to_cart(struct coordinate coordinate);
+centimetres_d distance_between_points(struct cartesian_coordinate point1, struct cartesian_coordinate point2);
+centimetres_d distance_from_cartesian_edge(struct cartesian_edge edge, struct cartesian_coordinate point);
 enum CircleOctant octant(radians_d radians);
 
 #ifdef __cplusplus

@@ -63,7 +63,7 @@
 #include <stdint.h>
 #include <math.h>
 
-radians_d angle_between_points(struct CartesianCoordinate p1, struct CartesianCoordinate p2)
+radians_d angle_between_points(struct cartesian_coordinate p1, struct cartesian_coordinate p2)
 {
     const centimetres_t dx = p2.x - p1.x;
     const centimetres_t dy = p2.y - p1.y;
@@ -109,51 +109,51 @@ radians_d angle_from_octant(radians_d radians)
     return d_to_rad_d(octantAngle - angle);
 }
 
-bool between_cartesian_edge(struct CartesianEdge edge, struct CartesianCoordinate point)
+bool between_cartesian_edge(struct cartesian_edge edge, struct cartesian_coordinate point)
 {
     // Horizontal Lines
     if (edge.leftPoint.x == edge.rightPoint.x) {
-        const struct CartesianCoordinate re1 = edge.leftPoint.y < edge.rightPoint.y ? edge.leftPoint : edge.rightPoint;
-        const struct CartesianCoordinate re2 = edge.leftPoint.y < edge.rightPoint.y ? edge.rightPoint : edge.leftPoint;
+        const struct cartesian_coordinate re1 = edge.leftPoint.y < edge.rightPoint.y ? edge.leftPoint : edge.rightPoint;
+        const struct cartesian_coordinate re2 = edge.leftPoint.y < edge.rightPoint.y ? edge.rightPoint : edge.leftPoint;
         return point.y >= re1.y && point.y <= re2.y;
     }
     // Veritcal Lines
     if (edge.leftPoint.y == edge.rightPoint.y) {
-        const struct CartesianCoordinate re1 = edge.leftPoint.x < edge.rightPoint.x ? edge.leftPoint : edge.rightPoint;
-        const struct CartesianCoordinate re2 = edge.leftPoint.x < edge.rightPoint.x ? edge.rightPoint : edge.leftPoint;
+        const struct cartesian_coordinate re1 = edge.leftPoint.x < edge.rightPoint.x ? edge.leftPoint : edge.rightPoint;
+        const struct cartesian_coordinate re2 = edge.leftPoint.x < edge.rightPoint.x ? edge.rightPoint : edge.leftPoint;
         return point.x >= re1.x && point.x <= re2.x;
     }
     // All other lines.
-    const struct CartesianCoordinate leftEdge = edge.leftPoint.x < edge.rightPoint.x ? edge.leftPoint : edge.rightPoint;
-    const struct CartesianCoordinate rightEdge = edge.leftPoint.x < edge.rightPoint.x ? edge.rightPoint : edge.leftPoint;
-    const struct CartesianCoordinate midPoint = { rightEdge.x - leftEdge.x, rightEdge.y - leftEdge.y };
+    const struct cartesian_coordinate leftEdge = edge.leftPoint.x < edge.rightPoint.x ? edge.leftPoint : edge.rightPoint;
+    const struct cartesian_coordinate rightEdge = edge.leftPoint.x < edge.rightPoint.x ? edge.rightPoint : edge.leftPoint;
+    const struct cartesian_coordinate midPoint = { rightEdge.x - leftEdge.x, rightEdge.y - leftEdge.y };
     // Translate by edge so that it goes through the origin.
-    const struct CartesianCoordinate t1 = { leftEdge.x - midPoint.x, leftEdge.y - midPoint.y };
-    const struct CartesianCoordinate t2 = { rightEdge.x - midPoint.x, rightEdge.y - midPoint.y };
-    const struct CartesianCoordinate tpoint = { point.x - midPoint.x, point.y - midPoint.y };
+    const struct cartesian_coordinate t1 = { leftEdge.x - midPoint.x, leftEdge.y - midPoint.y };
+    const struct cartesian_coordinate t2 = { rightEdge.x - midPoint.x, rightEdge.y - midPoint.y };
+    const struct cartesian_coordinate tpoint = { point.x - midPoint.x, point.y - midPoint.y };
     // Rotate the translated edge so that it is inline with the x axis.
-    const struct CartesianCoordinate origin = {0, 0};
+    const struct cartesian_coordinate origin = {0, 0};
     const double angle = rad_d_to_d(deg_d_to_rad_d(angle_between_points(origin, t2)));
-    const struct CartesianCoordinate r1 = { d_to_cm_t(cm_t_to_d(t1.x) * cos(angle)), d_to_cm_t(cm_t_to_d(t1.y) * sin(angle)) };
-    const struct CartesianCoordinate r2 = { d_to_cm_t(cm_t_to_d(t2.x) * cos(angle)), d_to_cm_t(cm_t_to_d(t2.y) * sin(angle)) };
-    const struct CartesianCoordinate rpoint = { d_to_cm_t(cm_t_to_d(tpoint.x) * cos(angle)), d_to_cm_t(cm_t_to_d(tpoint.y) * sin(angle)) };
+    const struct cartesian_coordinate r1 = { d_to_cm_t(cm_t_to_d(t1.x) * cos(angle)), d_to_cm_t(cm_t_to_d(t1.y) * sin(angle)) };
+    const struct cartesian_coordinate r2 = { d_to_cm_t(cm_t_to_d(t2.x) * cos(angle)), d_to_cm_t(cm_t_to_d(t2.y) * sin(angle)) };
+    const struct cartesian_coordinate rpoint = { d_to_cm_t(cm_t_to_d(tpoint.x) * cos(angle)), d_to_cm_t(cm_t_to_d(tpoint.y) * sin(angle)) };
     // Check the x values to see if the point is between the points of the edge.
     return rpoint.x >= r1.x && rpoint.x <= r2.x;
 }
 
-struct CartesianCoordinate coord_to_cart(struct Coordinate coordinate)
+struct cartesian_coordinate coord_to_cart(struct coordinate coordinate)
 {
     const double radius = cm_u_to_d(coordinate.distance);
     const double theta = rad_d_to_d(deg_t_to_rad_d(coordinate.direction));
     const centimetres_t x = d_to_cm_t(radius * cos(theta));
     const centimetres_t y = d_to_cm_t(radius * sin(theta));
-    const struct CartesianCoordinate result = {x, y};
+    const struct cartesian_coordinate result = {x, y};
     return result;
 }
 
-centimetres_d distance_between_points(struct CartesianCoordinate point1, struct CartesianCoordinate point2)
+centimetres_d distance_between_points(struct cartesian_coordinate point1, struct cartesian_coordinate point2)
 {
-    const struct CartesianCoordinate dpoint = { point2.x - point1.x, point2.y - point1.y };
+    const struct cartesian_coordinate dpoint = { point2.x - point1.x, point2.y - point1.y };
     // Horizontal Lines
     if (0 == dpoint.x) {
         return fabs(cm_t_to_d(dpoint.y));
@@ -165,7 +165,7 @@ centimetres_d distance_between_points(struct CartesianCoordinate point1, struct 
     return d_to_cm_d(sqrt(cm_t_to_d(dpoint.x * dpoint.x) + cm_t_to_d(dpoint.y * dpoint.y)));
 }
 
-centimetres_d distance_from_cartesian_edge(struct CartesianEdge edge, struct CartesianCoordinate point)
+centimetres_d distance_from_cartesian_edge(struct cartesian_edge edge, struct cartesian_coordinate point)
 {
    // If we are not within the bounds of the edge then calculate the distance from the nearest edge point.
     if (!between_cartesian_edge(edge, point))

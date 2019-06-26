@@ -59,6 +59,10 @@
 #ifndef CIRCLEOCTANT_H
 #define CIRCLEOCTANT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum CircleOctant {
     FirstOctant,
     SecondOctant,
@@ -69,5 +73,9 @@ enum CircleOctant {
     SeventhOctant,
     EightOctant
 };
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif  /* CIRCLEOCTANT_H */
