@@ -94,15 +94,6 @@ bool between_cartesian_edge(CartesianEdge edge, CartesianCoordinate point)
     return rpoint.x >= r1.x && rpoint.x <= r2.x;
 }
 
-
-CartesianCoordinate to_cartesian(Coordinate coordinate)
-{
-    const float radius = cm_u_to_f(coordinate.distance());
-    const float theta = rad_f_to_f(deg_t_to_rad_f(coordinate.direction()));
-    const int x = int(round(radius * cos(theta)));
-    const int y = int(round(radius * sin(theta)));
-    return CartesianCoordinate(x, y);
-}
 */
 
 degrees_f angle_between_points(CartesianCoordinate p1, CartesianCoordinate p2)
@@ -116,6 +107,15 @@ degrees_f angle_between_points(CartesianCoordinate p1, CartesianCoordinate p2)
         return dy > 0 ? f_to_deg_f(90.0f) : f_to_deg_f(-90.0f);
     }
     return rad_f_to_deg_f(f_to_rad_f(atan2((float) (dy), (float) (dx))));
+}
+
+CartesianCoordinate coord_to_cart(Coordinate coordinate)
+{
+    const float radius = cm_u_to_f(coordinate.distance());
+    const float theta = rad_f_to_f(deg_t_to_rad_f(coordinate.direction()));
+    const int x = int(round(radius * cos(theta)));
+    const int y = int(round(radius * sin(theta)));
+    return CartesianCoordinate(x, y);
 }
 
 CircleOctant octant(radians_f radians)

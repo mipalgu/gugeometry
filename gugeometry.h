@@ -78,6 +78,7 @@ CartesianCoordinate to_cartesian(Coordinate coordinate);
 */
 
 radians_f angle_between_points(CartesianCoordinate p1, CartesianCoordinate p2);
+CartesianCoordinate coord_to_cart(Coordinate coordinate);
 CircleOctant octant(radians_f radians);
 
 #ifdef __cplusplus
