@@ -20,9 +20,15 @@ PKGCONFIG_NAME=gugeometry
 PKGCONFIG_VERSION=1.0
 PKGCONFIG_DESCRIPTION=A library for basic geomtric operations.
 
+.ifndef IGNORE_TESTS
+robot-local:
+	$Ebmake test
+	$Ebmake robot-local IGNORE_TESTS=yes
+
+upload-robot:
+	$Ebmake upload-robot IGNORE_TESTS=yes
 
 test:
-.ifndef IGNORE_TESTS
 .ifndef TARGET
 	$Eenv ${MAKE} host-local MAKEFLAGS= IGNORE_TESTS=yes
 	$Ecd ${SRCDIR}/tests && ${MAKE} build-test BUILDDIR=build.host LOCAL= MAKEFLAGS= SDIR=${SRCDIR} TESTLIBDIR=${SRCDIR}/build.host-local && cd ${SRCDIR} && ./tests/build.host/tests || cd ${SRCDIR} CFLAGS=-I${GUNAO_DIR}/Common
