@@ -65,15 +65,15 @@
 
 radians_d angle_between_points(struct CartesianCoordinate p1, struct CartesianCoordinate p2)
 {
-    const int dx = p2.x - p1.x;
-    const int dy = p2.y - p1.y;
+    const centimetres_t dx = p2.x - p1.x;
+    const centimetres_t dy = p2.y - p1.y;
     if (0 == dx) {
         if (0 == dy) {
             return 0.0;
         }
         return dy > 0 ? d_to_rad_d(90.0) : d_to_rad_d(-90.0);
     }
-    return d_to_rad_d(atan2((double) (dy), (double) (dx)));
+    return d_to_rad_d(atan2(cm_t_to_d(dy), cm_t_to_d(dx)));
 }
 
 radians_d angle_for_octant(enum CircleOctant octant)
@@ -134,9 +134,9 @@ bool between_cartesian_edge(struct CartesianEdge edge, struct CartesianCoordinat
     // Rotate the translated edge so that it is inline with the x axis.
     const struct CartesianCoordinate origin = {0, 0};
     const double angle = rad_d_to_d(deg_d_to_rad_d(angle_between_points(origin, t2)));
-    const struct CartesianCoordinate r1 = { (int) (round(((double) (t1.x)) * cos(angle))), (int) (round(((double) (t1.y)) * sin(angle))) };
-    const struct CartesianCoordinate r2 = { (int) (round(((double) (t2.x)) * cos(angle))), (int) (round(((double) (t2.y)) * sin(angle))) };
-    const struct CartesianCoordinate rpoint = { (int) (round(((double) (tpoint.x)) * cos(angle))), (int) (round(((double) (tpoint.y)) * sin(angle))) };
+    const struct CartesianCoordinate r1 = { d_to_cm_t(cm_t_to_d(t1.x) * cos(angle)), d_to_cm_t(cm_t_to_d(t1.y) * sin(angle)) };
+    const struct CartesianCoordinate r2 = { d_to_cm_t(cm_t_to_d(t2.x) * cos(angle)), d_to_cm_t(cm_t_to_d(t2.y) * sin(angle)) };
+    const struct CartesianCoordinate rpoint = { d_to_cm_t(cm_t_to_d(tpoint.x) * cos(angle)), d_to_cm_t(cm_t_to_d(tpoint.y) * sin(angle)) };
     // Check the x values to see if the point is between the points of the edge.
     return rpoint.x >= r1.x && rpoint.x <= r2.x;
 }
@@ -145,27 +145,27 @@ struct CartesianCoordinate coord_to_cart(struct Coordinate coordinate)
 {
     const double radius = cm_u_to_d(coordinate.distance);
     const double theta = rad_d_to_d(deg_t_to_rad_d(coordinate.direction));
-    const int x = (int) (round(radius * cos(theta)));
-    const int y = (int) (round(radius * sin(theta)));
+    const centimetres_t x = d_to_cm_t(radius * cos(theta));
+    const centimetres_t y = d_to_cm_t(radius * sin(theta));
     const struct CartesianCoordinate result = {x, y};
     return result;
 }
 
-double distance_between_points(struct CartesianCoordinate point1, struct CartesianCoordinate point2)
+centimetres_d distance_between_points(struct CartesianCoordinate point1, struct CartesianCoordinate point2)
 {
     const struct CartesianCoordinate dpoint = { point2.x - point1.x, point2.y - point1.y };
     // Horizontal Lines
     if (0 == dpoint.x) {
-        return ((double) (abs(dpoint.y)));
+        return fabs(cm_t_to_d(dpoint.y));
     }
     // Veritcal Lines
     if (0 == dpoint.y) {
-        return ((double) (abs(dpoint.x)));
+        return fabs(cm_t_to_d(dpoint.x));
     }
-    return sqrt(((double) (dpoint.x * dpoint.x)) + ((double) (dpoint.y * dpoint.y)));
+    return d_to_cm_d(sqrt(cm_t_to_d(dpoint.x * dpoint.x) + cm_t_to_d(dpoint.y * dpoint.y)));
 }
 
-double distance_from_cartesian_edge(struct CartesianEdge edge, struct CartesianCoordinate point)
+centimetres_d distance_from_cartesian_edge(struct CartesianEdge edge, struct CartesianCoordinate point)
 {
    // If we are not within the bounds of the edge then calculate the distance from the nearest edge point.
     if (!between_cartesian_edge(edge, point))
@@ -173,13 +173,13 @@ double distance_from_cartesian_edge(struct CartesianEdge edge, struct CartesianC
         return MIN(distance_between_points(edge.leftPoint, point), distance_between_points(edge.rightPoint, point));
     }
     // Calculate the distance from the line to the point.
-    const double x0 = (double) (point.x);
-    const double y0 = (double) (point.y);
-    const double x1 = (double) (edge.leftPoint.x);
-    const double y1 = (double) (edge.leftPoint.y);
-    const double x2 = (double) (edge.rightPoint.x);
-    const double y2 = (double) (edge.rightPoint.y);
-    return fabs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1))); 
+    const double x0 = cm_t_to_d(point.x);
+    const double y0 = cm_t_to_d(point.y);
+    const double x1 = cm_t_to_d(edge.leftPoint.x);
+    const double y1 = cm_t_to_d(edge.leftPoint.y);
+    const double x2 = cm_t_to_d(edge.rightPoint.x);
+    const double y2 = cm_t_to_d(edge.rightPoint.y);
+    return d_to_cm_d(fabs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1)))); 
 }
 
 enum CircleOctant octant(radians_d radians)
