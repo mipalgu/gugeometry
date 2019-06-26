@@ -81,21 +81,31 @@ radians_f angle_for_octant(CircleOctant octant)
     case FirstOctant:
         return 0.0f;
     case SecondOctant:
-        return float(DEG2RAD(45.0f));
+        return f_to_rad_f(DEG2RAD(45.0f));
     case ThirdOctant:
-        return float(DEG2RAD(90.0f));
+        return f_to_rad_f(DEG2RAD(90.0f));
     case FourthOctant:
-        return float(DEG2RAD(135.0f));
+        return f_to_rad_f(DEG2RAD(135.0f));
     case FifthOctant:
-        return float(DEG2RAD(180.0f));
+        return f_to_rad_f(DEG2RAD(180.0f));
     case SixthOctant:
-        return float(DEG2RAD(225.0f));
+        return f_to_rad_f(DEG2RAD(225.0f));
     case SeventhOctant:
-        return float(DEG2RAD(270.0f));
+        return f_to_rad_f(DEG2RAD(270.0f));
     case EightOctant:
-        return float(DEG2RAD(315.0f));
+        return f_to_rad_f(DEG2RAD(315.0f));
     }
 }
+
+radians_f angle_from_octant(radians_f radians)
+{
+    const float angle = rad_f_to_f(radians);
+    const enum CircleOctant octant = octant(radians);
+    const float octantAngle = rad_f_to_f(angle_for_octant(octant)) + (octant % 2 == 0 ? 0.0f : DEG2RAD(45.0f));
+    if (octant % 2 == 0) {
+        return f_to_rad_f(angle - octantAngle);
+    }
+    return f_to_rad_f(octantAngle - angle);
 }
 
 bool between_cartesian_edge(CartesianEdge edge, CartesianCoordinate point)

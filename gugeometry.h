@@ -76,6 +76,7 @@ bool between_edge(Edge edge, Coordinate coordinate);
 
 radians_f angle_between_points(CartesianCoordinate p1, CartesianCoordinate p2);
 radians_f angle_for_octant(CircleOctant octant);
+radians_f angle_from_octant(radians_f radians);
 bool between_cartesian_edge(CartesianEdge edge, CartesianCoordinate point);
 CartesianCoordinate coord_to_cart(Coordinate coordinate);
 CircleOctant octant(radians_f radians);
