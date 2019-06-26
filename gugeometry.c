@@ -148,6 +148,20 @@ CartesianCoordinate coord_to_cart(Coordinate coordinate)
     return CartesianCoordinate(x, y);
 }
 
+float distance_between_points(CartesianCoordinate point1, CartesianCoordinate point2)
+{
+    const CartesianCoordinate dpoint = CartesianCoordinate(p2.x() - p1.x(), p2.y() - p1.y());
+    // Horizontal Lines
+    if (0 == dpoint.x()) {
+        return ((float) (abs(dpoint.y())));
+    }
+    // Veritcal Lines
+    if (0 == dpoint.y()) {
+        return ((float) (abs(dpoint.x())));
+    }
+    return sqrt(((float) (dpoint.x() * dpoint.x())) + ((float) (dpoint.y() * dpoint.y())));
+}
+
 CircleOctant octant(radians_f radians)
 {
     const float angle = rad_f_to_f(radians);
