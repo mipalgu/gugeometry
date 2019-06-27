@@ -109,6 +109,14 @@ radians_d angle_from_octant(radians_d radians)
     return d_to_rad_d(octantAngle - angle);
 }
 
+radians_d angle_to_edge(struct edge edge)
+{
+    const double distance = cm_d_to_d(distance_from_edge(edge));
+    const radians_d phi = d_to_rad_d(acos(distance / cm_u_to_d(edge.rightPoint.distance)));
+    const radians_d angle = deg_t_to_rad_d(edge.rightPoint.direction) - phi;
+    return angle;
+}
+
 bool between_cartesian_edge(struct cartesian_edge edge, struct cartesian_coordinate point)
 {
     // Horizontal Lines
