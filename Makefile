@@ -3,7 +3,7 @@
 # Callum McColl, 2019-06-05 11:58
 #
 
-ALL_TARGETS=host-local robot-local
+ALL_TARGETS=test robot-local
 
 C_SRCS!=ls *.c
 #CC_SRCS!=ls *.cc
@@ -23,8 +23,11 @@ PKGCONFIG_DESCRIPTION=A library for basic geomtric operations.
 all:	all-real
 
 .ifndef IGNORE_TESTS
+
+host-local:
+	$Ebmake host-local IGNORE_TESTS=yes
+
 robot-local:
-	$Ebmake test
 	$Ebmake robot-local IGNORE_TESTS=yes
 
 upload-robot:
