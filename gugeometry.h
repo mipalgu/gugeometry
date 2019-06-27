@@ -77,6 +77,7 @@ bool between_edge(Edge edge, Coordinate coordinate);
 radians_d angle_between_points(struct cartesian_coordinate p1, struct cartesian_coordinate p2);
 radians_d angle_for_octant(enum CircleOctant octant);
 radians_d angle_from_octant(radians_d radians);
+radians_d angle_parallel_to_edge(struct edge edge);
 radians_d angle_to_edge(struct edge edge);
 bool between_cartesian_edge(struct cartesian_edge edge, struct cartesian_coordinate point);
 struct cartesian_coordinate coord_to_cart(struct coordinate coordinate);
