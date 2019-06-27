@@ -123,7 +123,20 @@ radians_d angle_parallel_to_edge(struct edge edge)
 radians_d angle_to_edge(struct edge edge)
 {
     const double distance = cm_d_to_d(distance_from_edge(edge));
-    const radians_d phi = d_to_rad_d(acos(distance / cm_u_to_d(edge.rightPoint.distance)));
+    if (edge.rightPoint.distance == 0)
+    {
+        return 0.0;
+    }
+    const double div = distance / cm_u_to_d(edge.rightPoint.distance);
+    if (div < 1.05 && div > 0.95)
+    {
+        return 0.0;
+    }
+    const radians_d phi = d_to_rad_d(acos(div));
+    if (isnan(phi))
+    {
+        return 0.0;
+    }
     if (edge.rightPoint.direction < 0)
     {
         return deg_t_to_rad_d(edge.rightPoint.direction) + phi;
