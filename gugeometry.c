@@ -151,6 +151,12 @@ struct cartesian_coordinate coord_to_cart(struct coordinate coordinate)
     return result;
 }
 
+struct cartesian_edge edge_to_cart(struct edge edge)
+{
+    const struct cartesian_edge e = { coord_to_cart(edge.leftPoint), coord_to_cart(edge.rightPoint) };
+    return e;
+}
+
 centimetres_d distance_between_points(struct cartesian_coordinate point1, struct cartesian_coordinate point2)
 {
     const struct cartesian_coordinate dpoint = { point2.x - point1.x, point2.y - point1.y };
@@ -180,6 +186,12 @@ centimetres_d distance_from_cartesian_edge(struct cartesian_edge edge, struct ca
     const double x2 = cm_t_to_d(edge.rightPoint.x);
     const double y2 = cm_t_to_d(edge.rightPoint.y);
     return d_to_cm_d(fabs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1)))); 
+}
+
+centimetres_d distance_from_edge(struct edge edge)
+{
+    struct cartesian_coordinate p = {0, 0};
+    return distance_from_cartesian_edge(edge_to_cart(edge), p);
 }
 
 enum CircleOctant octant(radians_d radians)

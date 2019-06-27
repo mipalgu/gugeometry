@@ -79,8 +79,10 @@ radians_d angle_for_octant(enum CircleOctant octant);
 radians_d angle_from_octant(radians_d radians);
 bool between_cartesian_edge(struct cartesian_edge edge, struct cartesian_coordinate point);
 struct cartesian_coordinate coord_to_cart(struct coordinate coordinate);
+struct cartesian_edge edge_to_cart(struct edge edge);
 centimetres_d distance_between_points(struct cartesian_coordinate point1, struct cartesian_coordinate point2);
 centimetres_d distance_from_cartesian_edge(struct cartesian_edge edge, struct cartesian_coordinate point);
+centimetres_d distance_from_edge(struct edge edge);
 enum CircleOctant octant(radians_d radians);
 
 #ifdef __cplusplus
