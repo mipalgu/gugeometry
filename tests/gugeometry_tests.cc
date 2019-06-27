@@ -93,6 +93,11 @@ namespace CGTEST {
         const struct CartesianCoordinate p = CartesianCoordinate(-190, -275);
         ASSERT_EQ(int(distance_from_cartesian_edge(CartesianEdge(e1, e2), p)), 10);
     }
+
+    TEST_F(GUGeometryTests, CalculatesCorrectAngleToEdge) {
+        const Edge e = Edge(Coordinate(30, 10), Coordinate(-30, 15));
+        ASSERT_EQ(rad_d_to_deg_t(angle_to_edge(e)), 17);
+    }
    
    /* 
     TEST_F(GUGeometryTests, CalculatesCorrectNormalisedAngleForPositiveAngle) {
