@@ -110,6 +110,15 @@ radians_d angle_from_octant(radians_d radians)
     return d_to_rad_d(octantAngle - angle);
 }
 
+radians_d angle_of_cartesian_edge(struct cartesian_edge edge)
+{
+    const double length = sqrt(cm_t_to_d(((edge.leftPoint.x - edge.rightPoint.x) ^ 2) + ((edge.leftPoint.y - edge.rightPoint.y) ^ 2)));
+    if(edge.leftPoint.y <= edge.rightPoint.y)
+        return d_to_rad_d(acos(cm_t_to_d(edge.rightPoint.x - edge.leftPoint.x)/length));
+    else
+        return d_to_rad_d(acos(cm_t_to_d(edge.leftPoint.x - edge.rightPoint.x)/length));
+}
+
 radians_d angle_parallel_to_edge(struct edge edge)
 {
     const radians_d angle = angle_to_edge(edge);
