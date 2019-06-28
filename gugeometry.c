@@ -119,6 +119,11 @@ radians_d angle_of_cartesian_edge(struct cartesian_edge edge)
         return d_to_rad_d(acos(cm_t_to_d(edge.leftPoint.x - edge.rightPoint.x)/length));
 }
 
+radians_d angle_of_edge(struct edge edge)
+{
+    return angle_of_cartesian_edge(edge_to_cart(edge));
+}
+
 radians_d angle_parallel_to_edge(struct edge edge)
 {
     const radians_d angle = angle_to_edge(edge);
