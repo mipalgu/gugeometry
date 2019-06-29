@@ -126,12 +126,16 @@ radians_d angle_of_edge(struct edge edge)
 
 radians_d angle_parallel_to_edge(struct edge edge)
 {
-    const radians_d angle = angle_to_edge(edge);
-    if (angle <= 0)
-    {
-        return deg_t_to_rad_d(90) + angle;
+    const double A = fabs(rad_d_to_d(deg_t_to_rad_d(edge.leftPoint.direction - edge.rightPoint.direction)));
+    const double b = cm_u_to_d(edge.leftPoint.distance);
+    const double c = cm_u_to_d(edge.rightPoint.distance);
+    const double a = sqrt((b * b + c * c) - (2 * b * c * cos(A)));
+    const double B = acos((a * a + c * c - b * b) / (2 * a * c));
+    const radians_d parallelAngle = deg_t_to_rad_d(180) - B - fabs(rad_d_to_d(deg_t_to_rad_d(edge.rightPoint.direction)));
+    if (abs(edge.leftPoint.direction) > abs(edge.rightPoint.direction)) {
+        return -parallelAngle;
     }
-    return angle - deg_t_to_rad_d(90);
+    return parallelAngle;
 }
 
 radians_d angle_to_edge(struct edge edge)

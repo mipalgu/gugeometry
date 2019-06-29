@@ -101,15 +101,23 @@ namespace CGTEST {
 
     TEST_F(GUGeometryTests, CalculatesCoorectAngleParallelToEdge) {
         const Edge e = Edge(Coordinate(28, 185), Coordinate(-33, 96));
-        ASSERT_EQ(rad_d_to_deg_t(angle_parallel_to_edge(e)), 90);
+        ASSERT_EQ(rad_d_to_deg_t(angle_parallel_to_edge(e)), 59);
     }
 
-
-    TEST_F(GUGeometryTests, CalculatesCoorectAngleParallelToEdge2) {
+    TEST_F(GUGeometryTests, CalculatesCorrectAngleParallelToEdge2) {
         const Edge e = Edge(Coordinate(-8, 13), Coordinate(-9, 13));
+        ASSERT_EQ(rad_d_to_deg_t(angle_parallel_to_edge(e)), 81);
+    }
+
+    TEST_F(GUGeometryTests, CalculatesCorrectParrallelAngleAtZeroDegrees) {
+        const Edge e = Edge(Coordinate(9, 13), Coordinate(-9, 13));
         ASSERT_EQ(rad_d_to_deg_t(angle_parallel_to_edge(e)), 90);
     }
 
+    TEST_F(GUGeometryTests, CalculatesCorrectParrallelAngleAt28Degrees) {
+        const Edge e = Edge(Coordinate(10, 20), Coordinate(-10, 10));
+        ASSERT_EQ(rad_d_to_deg_t(angle_parallel_to_edge(e)), 28);
+    }
    
    /* 
     TEST_F(GUGeometryTests, CalculatesCorrectNormalisedAngleForPositiveAngle) {
