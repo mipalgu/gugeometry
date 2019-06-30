@@ -88,6 +88,9 @@ centimetres_d distance_between_points(struct cartesian_coordinate point1, struct
 centimetres_d distance_from_cartesian_edge(struct cartesian_edge edge, struct cartesian_coordinate point);
 centimetres_d distance_from_edge(struct edge edge);
 enum CircleOctant octant(radians_d radians);
+degrees_d normalise_deg_d(degrees_d angle);
+degrees_t normalise_deg_t(degrees_t angle);
+radians_d normalise_rad_d(radians_d angle);
 
 #ifdef __cplusplus
 };

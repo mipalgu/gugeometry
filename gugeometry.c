@@ -279,3 +279,26 @@ enum CircleOctant octant(radians_d radians)
     }
     return octant(d_to_rad_d(angle - (2.0 * M_PI)));
 }
+
+degrees_d normalise_deg_d(degrees_d angle) {
+    if (angle < 0) {
+        angle = fmod(angle, -360);
+    } else {
+        angle = fmod(angle, 360);
+    }
+    if (angle < -180) {
+        return angle + 360;
+    }
+    if (angle > 180) {
+        return angle - 360;
+    }
+    return angle;
+}
+
+degrees_t normalise_deg_t(degrees_t angle) {
+   return deg_d_to_deg_t(normalise_deg_d(deg_t_to_deg_d(angle))); 
+}
+
+radians_d normalise_rad_d(radians_d angle) {
+    return deg_d_to_rad_d(normalise_deg_d(rad_d_to_deg_d(angle)));
+}

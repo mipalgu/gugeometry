@@ -37,6 +37,14 @@ namespace CGTEST {
         }
 
     };
+
+    void testNormaliseAngle(degrees_t angle, degrees_t expected) {
+        degrees_d dAngle = deg_t_to_deg_d(angle);
+        radians_d radDAngle = deg_t_to_rad_d(angle);
+        ASSERT_EQ(expected, normalise_deg_t(angle));
+        ASSERT_EQ(deg_t_to_deg_d(expected), normalise_deg_d(dAngle));
+        ASSERT_LT(abs(deg_t_to_rad_d(expected) - normalise_rad_d(radDAngle)), f_to_rad_f(M_PI * (1.0 / 180.0)));
+    }
         
     TEST_F(GUGeometryTests, CalculatesCorrectDistanceWhenBesideEdge) {
         const struct CartesianCoordinate e1 = CartesianCoordinate(0, 0);
@@ -118,7 +126,48 @@ namespace CGTEST {
         const Edge e = Edge(Coordinate(10, 20), Coordinate(-10, 10));
         ASSERT_EQ(rad_d_to_deg_t(angle_parallel_to_edge(e)), 28);
     }
+
+    TEST_F(GUGeometryTests, CalculateNormalisedAngleAtN181) {
+        testNormaliseAngle(-181, 179);
+    }
+    TEST_F(GUGeometryTests, CalculateNormalisedAngleAt181) {
+        testNormaliseAngle(181, -179);
+    }
+
+    TEST_F(GUGeometryTests, CalculateNormalisedAngleAt380) {
+        testNormaliseAngle(380, 20);
+    }
+
+    TEST_F(GUGeometryTests, CalculateNormalisedangleAtN380) {
+        testNormaliseAngle(-380, -20);
+    }
    
+    TEST_F(GUGeometryTests, CalculateNormalisedangleAtN180) {
+        testNormaliseAngle(-180, -180);
+    }
+
+    TEST_F(GUGeometryTests, CalculateNormalisedangleAt180) {
+        testNormaliseAngle(180, 180);
+    }
+
+    TEST_F(GUGeometryTests, CalculateNormalisedangleAtN540) {
+        testNormaliseAngle(-540, -180);
+    }
+
+    TEST_F(GUGeometryTests, CalculateNormalisedangleAt540) {
+        testNormaliseAngle(540, 180);
+    }
+
+    TEST_F(GUGeometryTests, CalculateNormalisedangleAt360) {
+        testNormaliseAngle(360, 0);
+    } 
+
+    TEST_F(GUGeometryTests, CalculateNormalisedangleAtN360) {
+        testNormaliseAngle(-360, 0);
+    } 
+
+    
+
    /* 
     TEST_F(GUGeometryTests, CalculatesCorrectNormalisedAngleForPositiveAngle) {
         ASSERT_EQ(int(round(RAD2DEG(this->calculator->normaliseAngle(DEG2RAD(800.0f))))), 80);
