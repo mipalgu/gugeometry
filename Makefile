@@ -35,11 +35,15 @@ upload-robot:
 
 test:
 .ifndef TARGET
-	$Eenv ${MAKE} host-local MAKEFLAGS= IGNORE_TESTS=yes
-	$Ecd ${SRCDIR}/tests && ${MAKE} build-test BUILDDIR=build.host LOCAL= MAKEFLAGS= SDIR=${SRCDIR} TESTLIBDIR=${SRCDIR}/build.host-local && cd ${SRCDIR} && ./tests/build.host/tests || cd ${SRCDIR} CFLAGS=-I${GUNAO_DIR}/Common
+	$Eenv ${MAKE} host-local MAKEFLAGS= IGNORE_TESTS=yes TESTING=yes
+	$Ecd ${SRCDIR}/tests && ${MAKE} build-test BUILDDIR=build.host LOCAL= MAKEFLAGS= SDIR=${SRCDIR} TESTLIBDIR=${SRCDIR}/build.host-local && cd ${SRCDIR} && ./tests/build.host/tests || cd ${SRCDIR} && env ${MAKE} host-local MAKEFLAGS= IGNORE_TESTS=yes
 .endif
 .endif
 
 .include "../../mk/mipal.mk"
 # vim:ft=make
 #
+
+.ifdef TESTING
+HOST_LOCAL_OUTFLAGS=${HOST_LOCAL_SOFLAGS} ${COMMON_OFLAGS}
+.endif

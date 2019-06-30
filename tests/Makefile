@@ -6,7 +6,7 @@ HDRS!=ls *.h 2>/dev/null || :
 CC_SRCS!=ls *.cc 2>/dev/null || :
 CPP_SRCS!=ls *.cpp 2>/dev/null || :
 CXXFLAGS+=-I${SDIR} -I../../../../Common -I../../../gusimplewhiteboard
-LDFLAGS+=-L/usr/local/lib -lgtest -lgtest_main -L${TESTLIBDIR} -lgugeometry -lguunits
+SPECIFIC_LIBS=-Xlinker -L${TESTLIBDIR} -lgugeometry -L/usr/local/lib -lgtest -lgtest_main -lguunits -Xlinker -rpath ${TESTLIBDIR}
 WFLAGS=
 
 all:	all-real
@@ -17,3 +17,5 @@ test:
 
 .include "../../../mk/c++17.mk"
 .include "../../../mk/mipal.mk"
+
+LDFLAGS=
