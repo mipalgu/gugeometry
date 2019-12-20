@@ -119,12 +119,12 @@ radians_d angle_of_cartesian_edge(struct cartesian_edge edge)
         return d_to_rad_d(acos(cm_t_to_d(edge.leftPoint.x - edge.rightPoint.x)/length));
 }
 
-radians_d angle_of_edge(struct edge edge)
+radians_d angle_of_edge(struct gu_edge edge)
 {
     return angle_of_cartesian_edge(edge_to_cart(edge));
 }
 
-radians_d angle_parallel_to_edge(struct edge edge)
+radians_d angle_parallel_to_edge(struct gu_edge edge)
 {
     const double A = fabs(rad_d_to_d(deg_t_to_rad_d(edge.leftPoint.direction - edge.rightPoint.direction)));
     const double b = cm_u_to_d(edge.leftPoint.distance);
@@ -138,7 +138,7 @@ radians_d angle_parallel_to_edge(struct edge edge)
     return parallelAngle;
 }
 
-radians_d angle_to_edge(struct edge edge)
+radians_d angle_to_edge(struct gu_edge edge)
 {
     const double distance = cm_d_to_d(distance_from_edge(edge));
     if (edge.rightPoint.distance == 0)
@@ -194,7 +194,7 @@ bool between_cartesian_edge(struct cartesian_edge edge, struct cartesian_coordin
     return rpoint.x >= r1.x && rpoint.x <= r2.x;
 }
 
-struct cartesian_coordinate coord_to_cart(struct coordinate coordinate)
+struct cartesian_coordinate coord_to_cart(struct gu_coordinate coordinate)
 {
     const double radius = cm_u_to_d(coordinate.distance);
     const double theta = rad_d_to_d(deg_t_to_rad_d(coordinate.direction));
@@ -204,7 +204,7 @@ struct cartesian_coordinate coord_to_cart(struct coordinate coordinate)
     return result;
 }
 
-struct cartesian_edge edge_to_cart(struct edge edge)
+struct cartesian_edge edge_to_cart(struct gu_edge edge)
 {
     const struct cartesian_edge e = { coord_to_cart(edge.leftPoint), coord_to_cart(edge.rightPoint) };
     return e;
@@ -241,7 +241,7 @@ centimetres_d distance_from_cartesian_edge(struct cartesian_edge edge, struct ca
     return d_to_cm_d(fabs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1)))); 
 }
 
-centimetres_d distance_from_edge(struct edge edge)
+centimetres_d distance_from_edge(struct gu_edge edge)
 {
     struct cartesian_coordinate p = {0, 0};
     return distance_from_cartesian_edge(edge_to_cart(edge), p);
