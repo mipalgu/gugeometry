@@ -14,6 +14,7 @@ LOCAL=_LOCAL
 .include "../../mk/c++17.mk"
 
 SPECIFIC_LIBS+=-lm                      # need maths
+SPECIFIC_LIBS+=-lgucoordinates
 
 ${MODULE_BASE}_HDRS=${ALL_HDRS}
 PKGCONFIG_NAME=gugeometry

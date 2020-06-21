@@ -57,6 +57,7 @@
  */
 
 #include "gugeometry.h"
+#include "gugeometry_hidden.h"
 
 #include <guunits/guunits.h>
 #include <stdlib.h>
@@ -64,7 +65,7 @@
 #include <stdint.h>
 #include <math.h>
 
-radians_d angle_between_points(struct cartesian_coordinate p1, struct cartesian_coordinate p2)
+radians_d angle_between_points_old(const cartesian_coordinate p1, const cartesian_coordinate p2)
 {
     const centimetres_t dx = p2.x - p1.x;
     const centimetres_t dy = p2.y - p1.y;
@@ -182,10 +183,10 @@ bool between_cartesian_edge(struct cartesian_edge edge, struct cartesian_coordin
     const struct cartesian_coordinate midPoint = { rightEdge.x - leftEdge.x, rightEdge.y - leftEdge.y };
     // Translate by edge so that it goes through the origin.
     const struct cartesian_coordinate t1 = { leftEdge.x - midPoint.x, leftEdge.y - midPoint.y };
-    const struct cartesian_coordinate t2 = { rightEdge.x - midPoint.x, rightEdge.y - midPoint.y };
+    const struct gu_cartesian_coordinate t2 = { rightEdge.x - midPoint.x, rightEdge.y - midPoint.y };
     const struct cartesian_coordinate tpoint = { point.x - midPoint.x, point.y - midPoint.y };
     // Rotate the translated edge so that it is inline with the x axis.
-    const struct cartesian_coordinate origin = {0, 0};
+    const struct gu_cartesian_coordinate origin = {0, 0};
     const double angle = rad_d_to_d(deg_d_to_rad_d(angle_between_points(origin, t2)));
     const struct cartesian_coordinate r1 = { d_to_cm_t(cm_t_to_d(t1.x) * cos(angle)), d_to_cm_t(cm_t_to_d(t1.y) * sin(angle)) };
     const struct cartesian_coordinate r2 = { d_to_cm_t(cm_t_to_d(t2.x) * cos(angle)), d_to_cm_t(cm_t_to_d(t2.y) * sin(angle)) };
@@ -210,9 +211,9 @@ struct cartesian_edge edge_to_cart(struct gu_edge edge)
     return e;
 }
 
-centimetres_d distance_between_points(struct cartesian_coordinate point1, struct cartesian_coordinate point2)
+centimetres_d distance_between_points_old(const cartesian_coordinate point1, const cartesian_coordinate point2)
 {
-    const struct cartesian_coordinate dpoint = { point2.x - point1.x, point2.y - point1.y };
+    const gu_cartesian_coordinate dpoint = { point2.x - point1.x, point2.y - point1.y };
     // Horizontal Lines
     if (0 == dpoint.x) {
         return fabs(cm_t_to_d(dpoint.y));
@@ -229,7 +230,7 @@ centimetres_d distance_from_cartesian_edge(struct cartesian_edge edge, struct ca
    // If we are not within the bounds of the edge then calculate the distance from the nearest edge point.
     if (!between_cartesian_edge(edge, point))
     {
-        return MIN(distance_between_points(edge.leftPoint, point), distance_between_points(edge.rightPoint, point));
+        return MIN(distance_between_points_old(edge.leftPoint, point), distance_between_points_old(edge.rightPoint, point));
     }
     // Calculate the distance from the line to the point.
     const double x0 = cm_t_to_d(point.x);

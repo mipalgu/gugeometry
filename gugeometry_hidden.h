@@ -1,9 +1,9 @@
 /*
- * gugeometry.h 
+ * gugeometry_hidden.h 
  * gugeometry 
  *
- * Created by Callum McColl on 26/06/2019.
- * Copyright © 2019 Callum McColl. All rights reserved.
+ * Created by Callum McColl on 21/06/2020.
+ * Copyright © 2020 Callum McColl. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -56,45 +56,12 @@
  *
  */
 
-#ifndef GUGEOMETRY_H
-#define GUGEOMETRY_H
+#ifndef GUGEOMETRY_HIDDEN_H
+#define GUGEOMETRY_HIDDEN_H
 
 #include <guunits/Coordinate.h>
-#include <guunits/Edge.h>
-#include <guunits/CartesianCoordinate.h>
-#include <guunits/CartesianEdge.h>
-#include <gucoordinates/gucoordinates.h>
 
-#include "CircleOctant.h"
+radians_d angle_between_points_old(const cartesian_coordinate p1, const cartesian_coordinate p2);
+centimetres_d distance_between_points_old(const cartesian_coordinate point1, const cartesian_coordinate point2);
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/*
-bool between_edge(Edge edge, Coordinate coordinate);
-*/
-
-radians_d angle_between_points(const gu_cartesian_coordinate p1, const gu_cartesian_coordinate p2);
-radians_d angle_for_octant(enum CircleOctant octant);
-radians_d angle_from_octant(radians_d radians);
-radians_d angle_of_cartesian_edge(struct cartesian_edge edge);
-radians_d angle_of_edge(struct gu_edge);
-radians_d angle_parallel_to_edge(struct gu_edge edge);
-radians_d angle_to_edge(struct gu_edge edge);
-bool between_cartesian_edge(struct cartesian_edge edge, struct cartesian_coordinate point);
-struct cartesian_coordinate coord_to_cart(struct gu_coordinate coordinate);
-struct cartesian_edge edge_to_cart(struct gu_edge edge);
-centimetres_d distance_between_points(const gu_cartesian_coordinate point1, const gu_cartesian_coordinate point2);
-centimetres_d distance_from_cartesian_edge(struct cartesian_edge edge, struct cartesian_coordinate point);
-centimetres_d distance_from_edge(struct gu_edge edge);
-enum CircleOctant octant(radians_d radians);
-degrees_d normalise_deg_d(degrees_d angle);
-degrees_t normalise_deg_t(degrees_t angle);
-radians_d normalise_rad_d(radians_d angle);
-
-#ifdef __cplusplus
-};
-#endif
-
-#endif  /* GUGEOMETRY_H */
+#endif  /* GUGEOMETRY_HIDDEN_H */
