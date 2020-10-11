@@ -276,3 +276,14 @@ enum CircleOctant octant(radians_d radians)
     }
     return octant(d_to_rad_d(angle - (2.0 * M_PI)));
 }
+
+gu_field_coordinate face_relative_coordinate(const gu_relative_coordinate coord, const centimetres_u offset, const degrees_d bearing) {
+    const degrees_d oppositeOctant = bearing + 180.0;
+    const gu_cartesian_coordinate cartesianCoord = rr_coord_to_cartesian_coord(coord);
+    const centimetres_t dx = d_to_cm_t(cm_u_to_d(offset) * cos(rad_d_to_d(deg_d_to_rad_d(oppositeOctant))));
+    const centimetres_t dy = d_to_cm_t(cm_u_to_d(offset) * sin(rad_d_to_d(deg_d_to_rad_d(oppositeOctant))));
+    const gu_cartesian_coordinate newCoord = {cartesianCoord.x + dx, cartesianCoord.y + dy};
+    const gu_field_coordinate fieldCoord = {newCoord, deg_d_to_deg_t(bearing)};
+    return fieldCoord;
+}
+

@@ -93,6 +93,7 @@ degrees_d normalise_deg_d(degrees_d angle);
 degrees_t normalise_deg_t(degrees_t angle);
 radians_d normalise_rad_d(radians_d angle);
 
+gu_field_coordinate face_relative_coordinate(const gu_relative_coordinate coord, const centimetres_u offset, const degrees_d bearing);
 #ifdef __cplusplus
 };
 #endif

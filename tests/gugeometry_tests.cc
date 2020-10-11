@@ -128,7 +128,7 @@ namespace CGTEST {
     }
 
     TEST_F(GUGeometryTests, CalculateNormalisedAngleAtN181) {
-        testNormaliseAngle(-181, 179);
+        testNormaliseAngle(degrees_t(-181), degrees_t(179));
     }
     TEST_F(GUGeometryTests, CalculateNormalisedAngleAt181) {
         testNormaliseAngle(181, -179);
@@ -165,6 +165,18 @@ namespace CGTEST {
     TEST_F(GUGeometryTests, CalculateNormalisedangleAtN360) {
         testNormaliseAngle(-360, 0);
     } 
+
+    TEST_F(GUGeometryTests, FaceRelativeCoordinate) {
+        const gu_relative_coordinate relCoord = {45.0, 1000};
+        const centimetres_u offset = 30;
+        const degrees_t angle = 180;
+        const gu_cartesian_coordinate expectedCartesianCoord = {100, 70};
+        const gu_field_coordinate actual = face_relative_coordinate(relCoord, offset, angle);
+        const gu_cartesian_coordinate position = actual.position;
+        ASSERT_EQ(position.x, expectedCartesianCoord.x);
+        ASSERT_EQ(position.y, expectedCartesianCoord.y);
+        ASSERT_EQ(actual.heading, angle);
+    }
 
     
 
